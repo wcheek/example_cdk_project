@@ -9,7 +9,7 @@ class ExampleCdkProjectStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        # ** The code that defines your stack goes here
+        # ** The code that defines your stack goes inside this class
         # * Create input and output buckets
         input_bucket = s3.Bucket(scope=self, id="inputBucket")
         output_bucket = s3.Bucket(scope=self, id="outputBucket")
@@ -21,16 +21,19 @@ class ExampleCdkProjectStack(Stack):
             runtime=_lambda.Runtime.PYTHON_3_9,
             # Path is relative to where I execute cdk
             code=_lambda.Code.from_asset(path="lambda_funcs"),
+            # file name.function name
             handler="example_processing_lambda.lambda_handler",
+            # any environment variables you want accessible inside the lambda.
             environment={
                 "input_bucket": input_bucket.bucket_name,
                 "output_bucket": output_bucket.bucket_name,
             },
+            # lambda function timeout
             timeout=Duration.seconds(45),
             description="Example processing lambda function.",
         )
 
-        # * Create the connection.
+        # * Create the connection. Trigger lambda when object added to input.
         # Trigger processing_lambda when an object is added to input bucket.
         processing_lambda.add_event_source(
             lambda_event_sources.S3EventSource(
