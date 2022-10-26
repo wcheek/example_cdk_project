@@ -1,5 +1,6 @@
 # Example CDK Project 
 This project illustrates a simple file processing pipeline consisting of an input S3 bucket, a processing lambda function, and an output S3 bucket. For demonstration purposes.
+
 ![image](https://user-images.githubusercontent.com/66931618/197952400-c47d3482-5cb7-4e0a-b628-07982d95fe89.png)
 
 ___
