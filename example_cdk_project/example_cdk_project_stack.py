@@ -1,4 +1,4 @@
-from aws_cdk import Stack, Duration
+from aws_cdk import Stack, Duration, RemovalPolicy
 from aws_cdk import aws_lambda_event_sources as lambda_event_sources
 import aws_cdk.aws_s3 as s3
 import aws_cdk.aws_lambda as _lambda
@@ -11,8 +11,18 @@ class ExampleCdkProjectStack(Stack):
 
         # ** The code that defines your stack goes inside this class
         # * Create input and output buckets
-        input_bucket = s3.Bucket(scope=self, id="inputBucket")
-        output_bucket = s3.Bucket(scope=self, id="outputBucket")
+        input_bucket = s3.Bucket(
+            scope=self,
+            id="inputBucket",
+            removal_policy=RemovalPolicy.DESTROY,
+            auto_delete_objects=True,
+        )
+        output_bucket = s3.Bucket(
+            scope=self,
+            id="outputBucket",
+            removal_policy=RemovalPolicy.DESTROY,
+            auto_delete_objects=True,
+        )
 
         # * Create the lambda function to connect input to output
         processing_lambda = _lambda.Function(
